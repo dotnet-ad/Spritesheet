@@ -1,0 +1,22 @@
+
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2012
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Spritesheet", "Spritesheet\Spritesheet.csproj", "{C57AB359-8743-47D2-9731-9A1AEF32856E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Spritesheet.Sample.macOS", "Spritesheet.Sample.macOS\Spritesheet.Sample.macOS.csproj", "{399438CD-9CCD-410B-9491-B27746063359}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{C57AB359-8743-47D2-9731-9A1AEF32856E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C57AB359-8743-47D2-9731-9A1AEF32856E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C57AB359-8743-47D2-9731-9A1AEF32856E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C57AB359-8743-47D2-9731-9A1AEF32856E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{399438CD-9CCD-410B-9491-B27746063359}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{399438CD-9CCD-410B-9491-B27746063359}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{399438CD-9CCD-410B-9491-B27746063359}.Release|Any CPU.ActiveCfg = Release|Any CPU
+	EndGlobalSection
+EndGlobal
