@@ -1,15 +1,10 @@
-﻿namespace Spritesheet
-{
-	using System.Linq;
+﻿namespace Spritesheet {
 
-	public class AnimationDefinition
-	{
-		public AnimationDefinition(string name, Frame[] frames)
-		{
-			this.Name = name;
-		}
+    public class AnimationDefinition {
+        public AnimationDefinition(string name, Frame[] frames) {
+            Name = name;
+        }
+        public string Name { get; }
 
-		public string Name { get; }
-
-	}
+    }
 }

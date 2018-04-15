@@ -1,105 +1,88 @@
-﻿namespace Spritesheet
-{
-	using System;
-	using Microsoft.Xna.Framework;
-	using Microsoft.Xna.Framework.Graphics;
-	using System.Linq;
+﻿namespace Spritesheet {
+    using System;
+    using Microsoft.Xna.Framework;
+    using System.Linq;
 
-	public class Animation
-	{
-		public Animation(Frame[] frames)
-		{
-			this.Frames = frames;
-			this.TotalDuration = frames.Sum(x => x.Duration);
-			this.CurrentFrame = this.Frames[0];
-		}
+    public class Animation {
+        public Animation(Frame[] frames) {
+            Frames = frames;
+            TotalDuration = frames.Sum(x => x.Duration);
+            CurrentFrame = Frames[0];
+        }
 
-		#region Cloning
+        #region Cloning
+        public Animation Clone() => new Animation(Frames);
+        public Animation FlipX() => new Animation(Frames.Select(x => x.FlipX()).ToArray());
+        public Animation FlipY() => new Animation(Frames.Select(x => x.FlipY()).ToArray());
+        #endregion
 
-		public Animation Clone() => new Animation(this.Frames);
+        private Repeat.Mode repeat;
 
-		public Animation FlipX() => new Animation(this.Frames.Select(x => x.FlipX()).ToArray());
+        public bool IsStarted { get; private set; }
 
-		public Animation FlipY() => new Animation(this.Frames.Select(x => x.FlipY()).ToArray());
+        public Frame CurrentFrame { get; private set; }
 
-		#endregion 
+        public double Time { get; private set; }
 
-		private Repeat.Mode repeat;
+        public Frame[] Frames { get; }
 
-		public bool IsStarted { get; private set; }
+        public double TotalDuration { get; }
 
-		public Frame CurrentFrame { get; private set; }
+        private Frame GetFrame(double amount) {
+            var time = amount * TotalDuration;
+            var current = 0.0;
 
-		public double Time { get; private set; }
+            for (int i = 0; i < Frames.Length; i++) {
+                var frame = Frames[i];
+                current += frame.Duration;
+                if (time <= current) {
+                    return frame;
+                }
+            }
 
-		public Frame[] Frames { get; }
+            return null;
+        }
 
-		public double TotalDuration { get; }
+        public void Start(Repeat.Mode _repeat) {
+            Time = 0;
+            repeat = _repeat;
+            IsStarted = true;
+        }
 
-		private Frame GetFrame(double amount)
-		{
-			var time = amount * this.TotalDuration;
-			var current = 0.0;
+        public void Pause() => IsStarted = false;
 
-			for (int i = 0; i < Frames.Length; i++)
-			{
-				var frame = Frames[i];
-				current += frame.Duration;
-				if (time <= current)
-				{
-					return frame;
-				}
-			}
+        public void Resume() => IsStarted = true;
 
-			return null;
-		}
+        public void Stop() => Pause();
 
-		public void Start(Repeat.Mode repeat)
-		{
-			this.Time = 0;
-			this.repeat = repeat;
-			this.IsStarted = true;
-		}
+        public bool Update(GameTime time) {
+            if (IsStarted) {
+                Time += time.ElapsedGameTime.TotalMilliseconds;
 
-		public void Pause() => this.IsStarted = false;
+                var amount = UpdateCurrentFrame();
 
-		public void Resume() => this.IsStarted = true;
+                if (Repeat.IsFinished(repeat, amount)) {
+                    Stop();
+                    return true;
+                }
+            }
+            return false;
+        }
 
-		public void Stop() => this.Pause();
+        private double UpdateCurrentFrame() {
+            // Updating current frame
+            var interval = CurrentFrame.Duration;
+            var amount = (float)(Time / TotalDuration);
+            var value = Repeat.Calculate(repeat, amount);
+            var i = Math.Max(0, Math.Min(Frames.Length - 1, (int)(value * Frames.Length)));
+            CurrentFrame = Frames[i];
+            return amount;
+        }
 
-		public bool Update(GameTime time)
-		{
-			if (this.IsStarted)
-			{
-				this.Time += time.ElapsedGameTime.TotalMilliseconds;
-
-				var amount = this.UpdateCurrentFrame();
-
-				if (Repeat.IsFinished(repeat, amount))
-				{
-					this.Stop();
-					return true;
-				}
-			}
-			return false;
-		}
-
-		private double UpdateCurrentFrame()
-		{
-			// Updating current frame
-			var interval = this.CurrentFrame.Duration;
-			var amount = (float)(this.Time / this.TotalDuration);
-			var value = Repeat.Calculate(this.repeat, amount);
-			var i = Math.Max(0, Math.Min(Frames.Length - 1, (int)(value * Frames.Length)));
-			this.CurrentFrame = this.Frames[i];
-			return amount;
-		}
-
-		public void Reset()
-		{
-			this.Time = 0;
-			this.repeat = Repeat.Mode.Once;
-			this.UpdateCurrentFrame();
-		}
-	}
+        public void Reset() {
+            Time = 0;
+            repeat = Repeat.Mode.Once;
+            UpdateCurrentFrame();
+        }
+    }
 }

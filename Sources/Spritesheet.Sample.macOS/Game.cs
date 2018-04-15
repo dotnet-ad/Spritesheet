@@ -13,7 +13,7 @@
 
 		private SpriteBatch spriteBatch;
 
-		private Spritesheet sheet;
+		private SpriteSheet sheet;
 
 		private Animation[] animations;
 
@@ -49,7 +49,7 @@
 
 			this.font.LoadContent(this.GraphicsDevice);
 
-			this.sheet = new Spritesheet(LoadTexture("characters"))
+			this.sheet = new SpriteSheet(LoadTexture("characters"))
 										.WithGrid((32, 32));
 
 			this.animations = new[]
